@@ -5,6 +5,7 @@ import { loginUser } from "@/app/actions/auth"
 import Link from "next/link"
 import { Logo } from "@/components/ui/Logo"
 
+
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -24,9 +25,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center p-4 bg-beige">
       <div className="mb-8">
-        <Link href="/">
-          <Logo className="text-dark-green" />
-        </Link>
+        <Logo className="text-dark-green" scrolled />
       </div>
 
       <div className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-moss-green/20">

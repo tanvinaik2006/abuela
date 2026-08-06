@@ -26,16 +26,41 @@ export default function NewRecipePage() {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [isPending, startTransition] = useTransition();
+  const [stepError, setStepError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const currentIdx = STEP_ORDER.indexOf(currentStep);
   const isFirst = currentIdx === 0;
   const isLast = currentIdx === STEP_ORDER.length - 1;
 
+  /** Returns an error message if the current step is missing required fields. */
+  const validateStep = (step: Step): string | null => {
+    const form = formRef.current;
+    if (!form) return null;
+    const get = (name: string) => (form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null)?.value?.trim();
+    if (step === "basics") {
+      if (!get("title")) return "Recipe Title is required.";
+      if (!get("description")) return "Short Description is required.";
+      if (!get("category")) return "Category is required.";
+      if (!get("cuisine")) return "Cuisine is required.";
+    }
+    if (step === "story") {
+      if (!get("lovedOneName")) return "Their Name is required.";
+      if (!get("relationship")) return "Relationship is required.";
+      if (!get("story")) return "Their Story is required.";
+    }
+    return null;
+  };
+
   const goNext = () => {
+    const err = validateStep(currentStep);
+    if (err) { setStepError(err); return; }
+    setStepError(null);
     if (!isLast) setCurrentStep(STEP_ORDER[currentIdx + 1]);
   };
   const goPrev = () => {
+    setStepError(null);
     if (!isFirst) setCurrentStep(STEP_ORDER[currentIdx - 1]);
   };
 
@@ -71,13 +96,40 @@ export default function NewRecipePage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formRef.current) return;
+    // Validate all required steps before final submit
+    for (const step of ["basics", "story"] as Step[]) {
+      const err = validateStep(step);
+      if (err) {
+        setSubmitError(null);
+        setStepError(err);
+        setCurrentStep(step);
+        return;
+      }
+    }
+    setStepError(null);
+    setSubmitError(null);
     const formData = new FormData(formRef.current);
     // Serialize dynamic arrays as newline-delimited strings
     formData.set("ingredients", ingredients.filter(Boolean).join("\n"));
     formData.set("steps", steps.filter(Boolean).join("\n"));
     formData.set("tags", tags.join(","));
     formData.set("isPublic", String(isPublic));
-    startTransition(() => createRecipe(formData));
+    startTransition(async () => {
+      try {
+        await createRecipe(formData);
+      } catch (err: unknown) {
+        // redirect() throws internally in Next.js — let it propagate
+        if (
+          err instanceof Error &&
+          !err.message.includes("NEXT_REDIRECT")
+        ) {
+          setSubmitError(err.message);
+          setCurrentStep("basics");
+        } else {
+          throw err;
+        }
+      }
+    });
   };
 
   if (isPending) {
@@ -172,8 +224,7 @@ export default function NewRecipePage() {
           </div>
 
           {/* ---- STEP: BASICS ---- */}
-          {currentStep === "basics" && (
-            <div className="space-y-5">
+          <div className={cn("space-y-5", currentStep !== "basics" && "hidden")}>
               <div>
                 <label className="block text-sm font-semibold text-dark-green mb-1.5 font-inter">
                   Recipe Title *
@@ -261,11 +312,9 @@ export default function NewRecipePage() {
                 </div>
               </div>
             </div>
-          )}
 
           {/* ---- STEP: STORY ---- */}
-          {currentStep === "story" && (
-            <div className="space-y-5">
+          <div className={cn("space-y-5", currentStep !== "story" && "hidden")}>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-dark-green mb-1.5 font-inter">
@@ -326,11 +375,9 @@ export default function NewRecipePage() {
                 </p>
               </div>
             </div>
-          )}
 
           {/* ---- STEP: RECIPE ---- */}
-          {currentStep === "recipe" && (
-            <div className="space-y-8">
+          <div className={cn("space-y-8", currentStep !== "recipe" && "hidden")}>
               {/* Ingredients */}
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -431,11 +478,9 @@ export default function NewRecipePage() {
                 />
               </div>
             </div>
-          )}
 
           {/* ---- STEP: SETTINGS ---- */}
-          {currentStep === "settings" && (
-            <div className="space-y-6">
+          <div className={cn("space-y-6", currentStep !== "settings" && "hidden")}>
               {/* Privacy */}
               <div>
                 <label className="block text-sm font-semibold text-dark-green mb-3 font-inter">
@@ -535,10 +580,23 @@ export default function NewRecipePage() {
                 </p>
               </div>
             </div>
+
+          {/* Step / submit error banners */}
+          {stepError && (
+            <div className="mt-6 flex items-center gap-2 bg-rosy-brown/10 border border-rosy-brown/30 text-rosy-brown rounded-xl px-4 py-3 text-sm font-inter animate-pulse">
+              <span>⚠️</span>
+              <span>{stepError}</span>
+            </div>
+          )}
+          {submitError && (
+            <div className="mt-6 flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 rounded-xl px-4 py-3 text-sm font-inter">
+              <span>❌</span>
+              <span>{submitError}</span>
+            </div>
           )}
 
           {/* Navigation buttons */}
-          <div className="flex items-center justify-between mt-10 pt-6 border-t border-[#d4d0a8]">
+          <div className="flex items-center justify-between mt-6 pt-6 border-t border-[#d4d0a8]">
             <button
               type="button"
               onClick={goPrev}
