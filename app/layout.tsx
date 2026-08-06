@@ -3,6 +3,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { auth } from "@/auth";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -32,15 +33,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
       <body className="font-inter bg-beige text-dark-green antialiased min-h-screen flex flex-col">
-        <Navbar />
+        <Navbar session={session} />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

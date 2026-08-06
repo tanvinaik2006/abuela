@@ -3,16 +3,17 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, User, Search, Plus } from "lucide-react";
+import { Menu, X, User, Search, Plus, LogIn } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/Logo";
+import type { Session } from "next-auth";
 
 const navLinks = [
   { href: "/recipes", label: "Browse Recipes" },
   { href: "/search", label: "Search" },
 ];
 
-export function Navbar() {
+export function Navbar({ session }: { session: Session | null }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -70,26 +71,38 @@ export function Navbar() {
           >
             <Search className="w-5 h-5" />
           </Link>
-          <Link
-            href="/dashboard"
-            aria-label="Dashboard"
-            className={cn(
-              "p-2 rounded-lg transition-all duration-200",
-              scrolled || !isHomepage
-                ? "text-dark-green hover:bg-muted"
-                : "text-white/80 hover:text-white hover:bg-white/10"
-            )}
-          >
-            <User className="w-5 h-5" />
-          </Link>
-          <Link
-            href="/dashboard/new"
-            id="nav-add-recipe-btn"
-            className="btn-accent text-sm px-4 py-2"
-          >
-            <Plus className="w-4 h-4" />
-            Add Recipe
-          </Link>
+
+          {session ? (
+            <>
+              <Link
+                href="/dashboard"
+                aria-label="Dashboard"
+                className={cn(
+                  "p-2 rounded-lg transition-all duration-200",
+                  scrolled || !isHomepage
+                    ? "text-dark-green hover:bg-muted"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                )}
+              >
+                <User className="w-5 h-5" />
+              </Link>
+              <Link
+                href="/dashboard/new"
+                className="btn-accent text-sm px-4 py-2"
+              >
+                <Plus className="w-4 h-4" />
+                Add Recipe
+              </Link>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className="btn-accent text-sm px-4 py-2"
+            >
+              <LogIn className="w-4 h-4" />
+              Sign In
+            </Link>
+          )}
         </div>
 
         {/* Mobile menu toggle */}
@@ -120,22 +133,36 @@ export function Navbar() {
               </Link>
             ))}
             <hr className="border-[#d4d0a8]" />
-            <Link
-              href="/dashboard"
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-2 text-dark-green font-medium"
-            >
-              <User className="w-4 h-4" />
-              My Dashboard
-            </Link>
-            <Link
-              href="/dashboard/new"
-              onClick={() => setOpen(false)}
-              className="btn-accent justify-center text-sm"
-            >
-              <Plus className="w-4 h-4" />
-              Add Recipe
-            </Link>
+            
+            {session ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 text-dark-green font-medium"
+                >
+                  <User className="w-4 h-4" />
+                  My Dashboard
+                </Link>
+                <Link
+                  href="/dashboard/new"
+                  onClick={() => setOpen(false)}
+                  className="btn-accent justify-center text-sm"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Recipe
+                </Link>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 text-dark-green font-medium"
+              >
+                <LogIn className="w-4 h-4" />
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       )}
