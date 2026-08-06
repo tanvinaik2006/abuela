@@ -42,111 +42,106 @@ export default function HomePage() {
       {/* ============================================
           HERO SECTION
       ============================================ */}
-      <section className="hero-section noise-overlay relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 pb-16">
-        {/* Floating food illustration */}
-        <div className="absolute right-10 top-24 opacity-20 hidden xl:block animate-float">
-          <Image
-            src="/food-illustration.png"
-            alt=""
-            width={300}
-            height={400}
-            className="object-contain"
-            unoptimized
-            aria-hidden="true"
-          />
-        </div>
-        <div className="absolute left-6 bottom-24 opacity-15 hidden xl:block animate-float"
-          style={{ animationDelay: "2s" }}>
-          <Image
-            src="/chai-illustration.png"
-            alt=""
-            width={200}
-            height={200}
-            className="object-contain rounded-xl"
-            unoptimized
-            aria-hidden="true"
-          />
-        </div>
-
-        {/* Tag line above */}
-        <div
-          className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-beige text-sm font-medium px-4 py-2 rounded-full mb-8 animate-fade-in"
-        >
-          <Heart className="w-3.5 h-3.5 fill-rosy-brown text-rosy-brown" />
-          A digital family cookbook
-        </div>
-
-        {/* Main heading */}
-        <h1
-          className="font-playfair font-bold text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-white leading-[1.1] mb-6 animate-slide-up max-w-4xl"
-        >
-          Every recipe
-          <br />
-          <span
-            style={{
-              background: "linear-gradient(135deg, #F7F4D5 0%, #D3968C 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
+      <section className="hero-section noise-overlay relative pt-28 pb-20 px-6 md:px-10">
+        <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
+          {/* Tag line above */}
+          <div
+            className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-beige text-sm font-medium px-4 py-2 rounded-full mb-8 animate-fade-in"
           >
-            has a story.
-          </span>
-        </h1>
+            <Heart className="w-3.5 h-3.5 fill-rosy-brown text-rosy-brown" />
+            A digital family cookbook
+          </div>
 
-        <p
-          className="text-white/70 text-lg sm:text-xl max-w-2xl mb-10 font-inter leading-relaxed animate-slide-up"
-          style={{ animationDelay: "150ms" }}
-        >
-          Preserve the flavors, memories, and love of the people who made them.
-          Whether it&apos;s Grandma&apos;s biryani, Papa&apos;s pasta, or Nani&apos;s chai —
-          every recipe deserves to live on.
-        </p>
+          {/* Main heading */}
+          <h1
+            className="font-playfair font-bold text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-white leading-[1.1] mb-6 animate-slide-up max-w-4xl"
+          >
+            Every recipe
+            <br />
+            <span
+              style={{
+                background: "linear-gradient(135deg, #F7F4D5 0%, #D3968C 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              has a story.
+            </span>
+          </h1>
 
-        {/* Search bar */}
-        <div
-          className="w-full flex justify-center animate-slide-up"
-          style={{ animationDelay: "250ms" }}
-        >
-          <SearchBar variant="hero" />
-        </div>
+          <p
+            className="text-white/70 text-lg sm:text-xl max-w-2xl mb-10 font-inter leading-relaxed animate-slide-up"
+            style={{ animationDelay: "150ms" }}
+          >
+            Preserve the flavors, memories, and love of the people who made them.
+            Whether it&apos;s Grandma&apos;s biryani, Papa&apos;s pasta, or Nani&apos;s chai —
+            every recipe deserves to live on.
+          </p>
 
-        {/* CTA Buttons */}
-        <div
-          className="flex flex-wrap gap-4 justify-center mt-8 animate-slide-up"
-          style={{ animationDelay: "350ms" }}
-        >
-          <Link href="/recipes" className="btn-primary">
-            Browse Recipes
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link href="/dashboard/new" className="btn-secondary"
-            style={{ borderColor: "rgba(247,244,213,0.5)", color: "#F7F4D5" }}>
-            <BookOpen className="w-4 h-4" />
-            Preserve Yours
-          </Link>
-        </div>
+          {/* Search bar */}
+          <div
+            className="w-full flex justify-center animate-slide-up mb-8"
+            style={{ animationDelay: "250ms" }}
+          >
+            <SearchBar variant="hero" />
+          </div>
 
-        {/* Stats */}
-        <div
-          className="flex flex-wrap gap-8 justify-center mt-14 animate-fade-in"
-          style={{ animationDelay: "500ms" }}
-        >
-          {[
-            { value: `${allRecipes.length}+`, label: "Family Recipes" },
-            { value: "6", label: "Cuisines" },
-            { value: "∞", label: "Memories" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="font-playfair font-bold text-3xl text-rosy-brown">
-                {stat.value}
-              </div>
-              <div className="text-white/50 text-xs uppercase tracking-widest mt-1 font-inter">
-                {stat.label}
-              </div>
+          {/* CTA Buttons */}
+          <div
+            className="flex flex-wrap gap-4 justify-center animate-slide-up mb-14"
+            style={{ animationDelay: "350ms" }}
+          >
+            <Link href="/recipes" className="btn-primary">
+              Browse Recipes
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link href="/dashboard/new" className="btn-secondary"
+              style={{ borderColor: "rgba(247,244,213,0.5)", color: "#F7F4D5" }}>
+              <BookOpen className="w-4 h-4" />
+              Preserve Yours
+            </Link>
+          </div>
+
+          {/* Hero Illustration Showcase */}
+          <div
+            className="w-full max-w-4xl relative rounded-3xl p-3 bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl overflow-hidden animate-slide-up mb-12"
+            style={{ animationDelay: "450ms" }}
+          >
+            <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-cream-100">
+              <Image
+                src="/hero-illustration.png"
+                alt="Grandmother cooking in a cozy kitchen surrounded by spices and recipe books"
+                fill
+                className="object-cover object-center hover:scale-105 transition-transform duration-700"
+                priority
+                unoptimized
+              />
             </div>
-          ))}
+          </div>
+
+          {/* Stats */}
+          <div
+            className="flex flex-wrap gap-10 justify-center animate-fade-in"
+            style={{ animationDelay: "600ms" }}
+          >
+            {[
+              { value: `${allRecipes.length}+`, label: "Family Recipes" },
+              { value: "6", label: "Cuisines" },
+              { value: "∞", label: "Memories" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="font-playfair font-bold text-3xl text-rosy-brown">
+                  {stat.value}
+                </div>
+                <div className="text-white/50 text-xs uppercase tracking-widest mt-1 font-inter">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+      </section>
 
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/30">
