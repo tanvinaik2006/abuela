@@ -193,14 +193,14 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="flex-shrink-0">
-            <div className="relative w-72 h-96 lg:w-96 lg:h-[480px]">
-              <Image
-                src="/cooking-pot-illustration.png"
-                alt="Ingredients pouring into a cooking pot illustration"
-                fill
-                className="object-contain hover:scale-105 transition-transform duration-500"
-                unoptimized
-              />
+            <div className="relative w-72 h-96 sm:w-80 sm:h-[460px] lg:w-96 lg:h-[500px]">
+                <Image
+                  src="/avocado-toast-illustration.png"
+                  alt="Avocado toast illustrations"
+                  fill
+                  className="object-contain hover:scale-105 transition-transform duration-500 drop-shadow-md mix-blend-multiply"
+                  unoptimized
+                />
             </div>
           </div>
         </div>
