@@ -36,7 +36,7 @@ export function SearchBar({
 
   if (variant === "hero") {
     return (
-      <form onSubmit={handleSubmit} className={cn("w-full max-w-2xl", className)}>
+      <form onSubmit={handleSubmit} className={cn("w-full max-w-2xl mx-auto", className)}>
         <div className="relative group">
           <div className="absolute inset-0 bg-rosy-brown/20 rounded-2xl blur-xl group-focus-within:bg-rosy-brown/30 transition-all duration-300" />
           <div className="relative flex items-center bg-beige rounded-2xl shadow-warm overflow-hidden">

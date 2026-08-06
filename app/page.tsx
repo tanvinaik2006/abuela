@@ -105,7 +105,7 @@ export default function HomePage() {
 
         {/* Search bar */}
         <div
-          className="w-full animate-slide-up"
+          className="w-full flex justify-center animate-slide-up"
           style={{ animationDelay: "250ms" }}
         >
           <SearchBar variant="hero" />
