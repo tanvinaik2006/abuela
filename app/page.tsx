@@ -89,7 +89,7 @@ export default function HomePage() {
 
           {/* CTA Buttons */}
           <div
-            className="flex flex-wrap gap-4 justify-center animate-slide-up mb-14"
+            className="flex flex-wrap gap-4 justify-center animate-slide-up mb-12"
             style={{ animationDelay: "350ms" }}
           >
             <Link href="/recipes" className="btn-primary">
@@ -101,23 +101,6 @@ export default function HomePage() {
               <BookOpen className="w-4 h-4" />
               Preserve Yours
             </Link>
-          </div>
-
-          {/* Hero Illustration Showcase */}
-          <div
-            className="w-full max-w-4xl relative rounded-3xl p-3 bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl overflow-hidden animate-slide-up mb-12"
-            style={{ animationDelay: "450ms" }}
-          >
-            <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-cream-100">
-              <Image
-                src="/hero-illustration.png"
-                alt="Grandmother cooking in a cozy kitchen surrounded by spices and recipe books"
-                fill
-                className="object-cover object-center hover:scale-105 transition-transform duration-700"
-                priority
-                unoptimized
-              />
-            </div>
           </div>
 
           {/* Stats */}
@@ -210,12 +193,12 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="flex-shrink-0">
-            <div className="relative w-64 h-64 lg:w-80 lg:h-80">
+            <div className="relative w-72 h-96 lg:w-96 lg:h-[480px]">
               <Image
-                src="/food-illustration.png"
-                alt="Food illustration"
+                src="/cooking-pot-illustration.png"
+                alt="Ingredients pouring into a cooking pot illustration"
                 fill
-                className="object-contain animate-float"
+                className="object-contain hover:scale-105 transition-transform duration-500"
                 unoptimized
               />
             </div>
