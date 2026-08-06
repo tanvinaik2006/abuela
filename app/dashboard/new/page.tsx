@@ -3,7 +3,7 @@
 import { useState, useRef, useTransition } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Plus, X, Globe, Lock } from "lucide-react";
-import { CATEGORIES, CUISINES, DIFFICULTIES } from "@/lib/data";
+import { CATEGORIES, CUISINES, DIFFICULTIES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { createRecipe } from "@/app/actions/recipe";
 
@@ -180,6 +180,7 @@ export default function NewRecipePage() {
                 </label>
                 <input
                   id="recipe-title-input"
+                  name="title"
                   type="text"
                   placeholder="e.g. Grandma's Masala Chai"
                   className="input-abuela"
@@ -192,6 +193,7 @@ export default function NewRecipePage() {
                 </label>
                 <textarea
                   id="recipe-description-input"
+                  name="description"
                   placeholder="What makes this recipe special? (1–2 sentences)"
                   className="input-abuela resize-none"
                   rows={2}
@@ -203,7 +205,7 @@ export default function NewRecipePage() {
                   <label className="block text-sm font-semibold text-dark-green mb-1.5 font-inter">
                     Category *
                   </label>
-                  <select id="recipe-category-select" className="input-abuela" required>
+                  <select id="recipe-category-select" name="category" className="input-abuela" required>
                     <option value="">Select…</option>
                     {CATEGORIES.map((c) => (
                       <option key={c} value={c}>{c}</option>
@@ -214,7 +216,7 @@ export default function NewRecipePage() {
                   <label className="block text-sm font-semibold text-dark-green mb-1.5 font-inter">
                     Cuisine *
                   </label>
-                  <select id="recipe-cuisine-select" className="input-abuela" required>
+                  <select id="recipe-cuisine-select" name="cuisine" className="input-abuela" required>
                     <option value="">Select…</option>
                     {CUISINES.map((c) => (
                       <option key={c} value={c}>{c}</option>
@@ -227,19 +229,19 @@ export default function NewRecipePage() {
                   <label className="block text-sm font-semibold text-dark-green mb-1.5 font-inter">
                     Prep Time (min)
                   </label>
-                  <input id="recipe-prep-time-input" type="number" min={0} placeholder="15" className="input-abuela" />
+                  <input id="recipe-prep-time-input" name="prepTime" type="number" min={0} placeholder="15" className="input-abuela" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-dark-green mb-1.5 font-inter">
                     Cook Time (min)
                   </label>
-                  <input id="recipe-cook-time-input" type="number" min={0} placeholder="30" className="input-abuela" />
+                  <input id="recipe-cook-time-input" name="cookTime" type="number" min={0} placeholder="30" className="input-abuela" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-dark-green mb-1.5 font-inter">
                     Servings
                   </label>
-                  <input id="recipe-servings-input" type="number" min={1} placeholder="4" className="input-abuela" />
+                  <input id="recipe-servings-input" name="servings" type="number" min={1} placeholder="4" className="input-abuela" />
                 </div>
               </div>
               <div>
@@ -271,6 +273,7 @@ export default function NewRecipePage() {
                   </label>
                   <input
                     id="recipe-loved-one-name-input"
+                    name="lovedOneName"
                     type="text"
                     placeholder="e.g. Grandma, Mom, Dad"
                     className="input-abuela"
@@ -283,6 +286,7 @@ export default function NewRecipePage() {
                   </label>
                   <input
                     id="recipe-relationship-input"
+                    name="relationship"
                     type="text"
                     placeholder="e.g. Grandmother, Father"
                     className="input-abuela"
@@ -299,6 +303,7 @@ export default function NewRecipePage() {
                 </p>
                 <textarea
                   id="recipe-story-input"
+                  name="story"
                   placeholder="Every Sunday, Nani would wake before dawn and start brewing chai. The whole house smelled of cardamom and ginger before any of us opened our eyes…"
                   className="input-abuela resize-none"
                   rows={8}
@@ -311,6 +316,7 @@ export default function NewRecipePage() {
                 </label>
                 <input
                   id="recipe-cover-image-input"
+                  name="coverImage"
                   type="url"
                   placeholder="https://…"
                   className="input-abuela"
@@ -418,6 +424,7 @@ export default function NewRecipePage() {
                 </label>
                 <textarea
                   id="recipe-tips-input"
+                  name="tips"
                   placeholder="Any special technique, secret ingredient, or advice?"
                   className="input-abuela resize-none"
                   rows={3}
@@ -512,6 +519,7 @@ export default function NewRecipePage() {
                 </label>
                 <textarea
                   id="recipe-notes-input"
+                  name="notes"
                   placeholder="Storage tips, variations, or anything else worth noting…"
                   className="input-abuela resize-none"
                   rows={3}
