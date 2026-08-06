@@ -5,7 +5,8 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-function slugify(text: string): string {
+function slugify(text: string | null | undefined): string {
+  if (!text) return "";
   return text
     .toLowerCase()
     .replace(/[^\w\s-]/g, "")
@@ -36,6 +37,10 @@ export async function createRecipe(formData: FormData) {
   const lovedOneName = formData.get("lovedOneName") as string;
   const relationship = formData.get("relationship") as string;
   const story = formData.get("story") as string;
+
+  if (!title || !lovedOneName || !relationship || !category || !cuisine) {
+    throw new Error("Missing required fields. Please fill in all required fields.");
+  }
   const coverImage = (formData.get("coverImage") as string) || "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=800&q=80";
   const tips = formData.get("tips") as string;
   const notes = formData.get("notes") as string;
