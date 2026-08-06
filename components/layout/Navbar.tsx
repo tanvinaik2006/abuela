@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, BookOpen, ChefHat, User, Search, Plus } from "lucide-react";
+import { Menu, X, User, Search, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/ui/Logo";
 
 const navLinks = [
   { href: "/recipes", label: "Browse Recipes" },
@@ -32,37 +33,9 @@ export function Navbar() {
           : "bg-transparent"
       )}
     >
-      <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2.5 group"
-          aria-label="ABUELA Home"
-        >
-          <div
-            className={cn(
-              "w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300",
-              scrolled || !isHomepage
-                ? "bg-dark-green"
-                : "bg-white/20 backdrop-blur-sm"
-            )}
-          >
-            <BookOpen
-              className={cn(
-                "w-5 h-5",
-                scrolled || !isHomepage ? "text-beige" : "text-white"
-              )}
-            />
-          </div>
-          <span
-            className={cn(
-              "font-playfair font-bold text-2xl tracking-wide transition-colors duration-300",
-              scrolled || !isHomepage ? "text-dark-green" : "text-white"
-            )}
-          >
-            ABUELA
-          </span>
-        </Link>
+      <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+        {/* Characterful Logo */}
+        <Logo scrolled={scrolled || !isHomepage} />
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { BookOpen, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 
 const footerLinks = {
   Explore: [
@@ -34,14 +35,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="md:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 bg-beige/20 rounded-xl flex items-center justify-center">
-                <BookOpen className="w-5 h-5 text-beige" />
-              </div>
-              <span className="font-playfair font-bold text-2xl tracking-wide text-beige">
-                ABUELA
-              </span>
-            </Link>
+            <div className="mb-4">
+              <Logo scrolled={false} />
+            </div>
             <p className="text-beige/70 text-sm leading-relaxed max-w-xs">
               A digital home for the meals, traditions, and memories shared by
               the people we love. Every recipe has a story.
