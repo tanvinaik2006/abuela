@@ -46,7 +46,9 @@ export async function registerUser(formData: FormData) {
 
 export async function loginUser(formData: FormData) {
   try {
-    await signIn("credentials", formData)
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    await signIn("credentials", { email, password, redirectTo: "/dashboard" })
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -59,4 +61,8 @@ export async function loginUser(formData: FormData) {
     // Need to rethrow Next.js redirect errors so navigation works
     throw error;
   }
+}
+
+export async function logoutUser() {
+  await signOut({ redirectTo: "/" })
 }

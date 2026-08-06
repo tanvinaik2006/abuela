@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, User, Search, Plus, LogIn } from "lucide-react";
+import { Menu, X, User, Search, Plus, LogIn, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/Logo";
 import type { Session } from "next-auth";
+import { logoutUser } from "@/app/actions/auth";
 
 const navLinks = [
   { href: "/recipes", label: "Browse Recipes" },
@@ -93,6 +94,20 @@ export function Navbar({ session }: { session: Session | null }) {
                 <Plus className="w-4 h-4" />
                 Add Recipe
               </Link>
+              <form action={logoutUser}>
+                <button
+                  type="submit"
+                  title="Sign Out"
+                  className={cn(
+                    "p-2 rounded-lg transition-all duration-200",
+                    scrolled || !isHomepage
+                      ? "text-red-600 hover:bg-red-50"
+                      : "text-red-400 hover:text-red-300 hover:bg-white/10"
+                  )}
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </form>
             </>
           ) : (
             <Link
@@ -152,6 +167,15 @@ export function Navbar({ session }: { session: Session | null }) {
                   <Plus className="w-4 h-4" />
                   Add Recipe
                 </Link>
+                <form action={logoutUser} className="w-full">
+                  <button
+                    type="submit"
+                    className="flex w-full items-center gap-2 text-red-600 font-medium py-1"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </button>
+                </form>
               </>
             ) : (
               <Link
