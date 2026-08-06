@@ -14,18 +14,15 @@ interface RecipePageProps {
 
 export async function generateMetadata({ params }: RecipePageProps): Promise<Metadata> {
   const { id } = await params;
-  const recipe = getRecipeById(id);
+  const recipe = await getRecipeById(id);
   if (!recipe) return { title: "Recipe Not Found" };
   return {
     title: recipe.title,
-    description: recipe.description,
+    description: recipe.description ?? undefined,
   };
 }
 
-export async function generateStaticParams() {
-  const recipes = getPublicRecipes();
-  return recipes.map((r) => ({ id: r.id }));
-}
+// generateStaticParams removed — data is now fetched dynamically from the database
 
 const difficultyColor: Record<string, string> = {
   Easy: "badge-green",
@@ -35,13 +32,13 @@ const difficultyColor: Record<string, string> = {
 
 export default async function RecipePage({ params }: RecipePageProps) {
   const { id } = await params;
-  const recipe = getRecipeById(id);
+  const recipe = await getRecipeById(id);
 
   if (!recipe) {
     notFound();
   }
 
-  const allRecipes = getPublicRecipes();
+  const allRecipes = await getPublicRecipes();
   const related = allRecipes
     .filter((r) => r.id !== recipe.id && (r.cuisine === recipe.cuisine || r.category === recipe.category))
     .slice(0, 3);
@@ -100,9 +97,9 @@ export default async function RecipePage({ params }: RecipePageProps) {
             {/* Author + Actions */}
             <div className="flex flex-wrap items-center justify-between gap-4 mb-10 pb-8 border-b border-[#d4d0a8]">
               <div className="flex items-center gap-3">
-                {recipe.authorImage && (
+                {recipe.author?.image && (
                   <Image
-                    src={recipe.authorImage}
+                    src={recipe.author.image}
                     alt={recipe.authorName}
                     width={44}
                     height={44}
@@ -120,7 +117,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
                   recipeTitle={recipe.title}
                   likes={recipe.likes}
                   authorName={recipe.authorName}
-                  authorImage={recipe.authorImage}
+                  authorImage={recipe.author?.image ?? undefined}
                 />
                 <div className="flex items-center gap-1.5 text-sm font-semibold text-rosy-brown">
                   <Heart className="w-4 h-4 fill-rosy-brown" />

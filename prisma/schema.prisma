@@ -4,8 +4,7 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -62,7 +61,11 @@ model VerificationToken {
 model Recipe {
   id            String   @id @default(cuid())
   title         String
+  slug          String   @unique
   description   String?
+  story         String?
+  lovedOneName  String
+  relationship  String
   authorName    String
   authorId      String?
   author        User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
@@ -70,10 +73,17 @@ model Recipe {
   cookTime      Int
   servings      Int
   difficulty    String
+  cuisine       String
+  category      String
+  tips          String?
+  notes         String?
+  isPublic      Boolean  @default(false)
+  likes         Int      @default(0)
   coverImage    String
+  images        String[]
   tags          String[]
   ingredients   String[] // Array of strings or we can make it a separate model, array is simpler for Postgres
-  instructions  String[]
+  steps         String[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

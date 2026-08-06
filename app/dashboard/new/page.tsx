@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useTransition } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Plus, X, Globe, Lock } from "lucide-react";
 import { CATEGORIES, CUISINES, DIFFICULTIES } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { createRecipe } from "@/app/actions/recipe";
 
 type Step = "basics" | "story" | "recipe" | "settings";
 
@@ -24,7 +25,8 @@ export default function NewRecipePage() {
   const [isPublic, setIsPublic] = useState(true);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const currentIdx = STEP_ORDER.indexOf(currentStep);
   const isFirst = currentIdx === 0;
@@ -68,27 +70,26 @@ export default function NewRecipePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (!formRef.current) return;
+    const formData = new FormData(formRef.current);
+    // Serialize dynamic arrays as newline-delimited strings
+    formData.set("ingredients", ingredients.filter(Boolean).join("\n"));
+    formData.set("steps", steps.filter(Boolean).join("\n"));
+    formData.set("tags", tags.join(","));
+    formData.set("isPublic", String(isPublic));
+    startTransition(() => createRecipe(formData));
   };
 
-  if (submitted) {
+  if (isPending) {
     return (
       <div className="min-h-screen pt-20 flex flex-col items-center justify-center bg-beige px-6 text-center">
-        <div className="text-6xl mb-6 animate-float">🥘</div>
+        <div className="text-6xl mb-6 animate-bounce">🥘</div>
         <h1 className="font-playfair font-bold text-4xl text-dark-green mb-4">
-          Recipe Saved!
+          Saving your recipe…
         </h1>
         <p className="text-dark-green/65 text-lg mb-8 max-w-md font-inter">
-          Your recipe has been preserved. Their story will live on forever.
+          Preserving the story for generations to come.
         </p>
-        <div className="flex gap-4">
-          <Link href="/recipes" className="btn-primary">
-            Browse Recipes
-          </Link>
-          <Link href="/dashboard" className="btn-secondary">
-            My Dashboard
-          </Link>
-        </div>
       </div>
     );
   }
@@ -160,7 +161,7 @@ export default function NewRecipePage() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="card p-8">
+        <form ref={formRef} onSubmit={handleSubmit} className="card p-8">
           <div className="mb-6">
             <h2 className="font-playfair font-bold text-2xl text-dark-green">
               {STEPS.find((s) => s.id === currentStep)?.label}

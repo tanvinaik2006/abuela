@@ -23,7 +23,7 @@ export default async function BrowseRecipesPage({ searchParams }: BrowsePageProp
   const params = await searchParams;
   const { category, cuisine, difficulty } = params;
 
-  let recipes = getPublicRecipes();
+  let recipes = await getPublicRecipes();
 
   if (category) {
     recipes = recipes.filter((r) => r.category === category);

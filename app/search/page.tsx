@@ -15,7 +15,7 @@ interface SearchPageProps {
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
   const query = params.q || "";
-  const results = query ? searchRecipes(query) : getPublicRecipes();
+  const results = query ? await searchRecipes(query) : await getPublicRecipes();
 
   return (
     <div className="min-h-screen pt-20">

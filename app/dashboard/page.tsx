@@ -1,4 +1,4 @@
-import { getPublicRecipes } from "@/lib/data";
+import { getUserRecipes } from "@/lib/data";
 import { RecipeCard } from "@/components/recipe/RecipeCard";
 import Link from "next/link";
 import {
@@ -15,9 +15,12 @@ export const metadata: Metadata = {
   description: "Manage your family recipe collection.",
 };
 
-export default function DashboardPage() {
-  // Using public recipes as demo "my recipes"
-  const myRecipes = getPublicRecipes().slice(0, 4);
+import { auth } from "@/auth";
+
+export default async function DashboardPage() {
+  const session = await auth();
+  const userId = session?.user?.id;
+  const myRecipes = userId ? await getUserRecipes(userId) : [];
   const publicCount = myRecipes.filter((r) => r.isPublic).length;
   const totalLikes = myRecipes.reduce((sum, r) => sum + r.likes, 0);
 

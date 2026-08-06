@@ -32,8 +32,8 @@ const categoryIcons: Record<string, React.ReactNode> = {
   Soup: <Soup className="w-5 h-5" />,
 };
 
-export default function HomePage() {
-  const allRecipes = getPublicRecipes();
+export default async function HomePage() {
+  const allRecipes = await getPublicRecipes();
   const featuredRecipes = allRecipes.slice(0, 3);
   const recentRecipes = allRecipes.slice(3, 6);
 

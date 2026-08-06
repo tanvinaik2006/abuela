@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { loginUser } from "@/app/actions/auth"
 import Link from "next/link"
-import Logo from "@/components/ui/Logo"
+import { Logo } from "@/components/ui/Logo"
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
