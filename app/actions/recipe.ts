@@ -87,3 +87,108 @@ export async function createRecipe(formData: FormData) {
   revalidatePath("/recipes");
   redirect(`/recipes/${recipe.id}`);
 }
+
+export async function updateRecipe(id: string, formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error("You must be logged in to update a recipe.");
+  }
+
+  // Verify ownership
+  const existingRecipe = await prisma.recipe.findUnique({
+    where: { id },
+  });
+
+  if (!existingRecipe) {
+    throw new Error("Recipe not found.");
+  }
+
+  if (existingRecipe.authorId !== session.user.id) {
+    throw new Error("You do not have permission to edit this recipe.");
+  }
+
+  // Parse form data
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+  const category = formData.get("category") as string;
+  const cuisine = formData.get("cuisine") as string;
+  const prepTime = parseInt(formData.get("prepTime") as string) || 0;
+  const cookTime = parseInt(formData.get("cookTime") as string) || 0;
+  const servings = parseInt(formData.get("servings") as string) || 1;
+  const difficulty = formData.get("difficulty") as string || "Easy";
+  const lovedOneName = formData.get("lovedOneName") as string;
+  const relationship = formData.get("relationship") as string;
+  const story = formData.get("story") as string;
+  const coverImage = (formData.get("coverImage") as string) || "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=800&q=80";
+  const tips = formData.get("tips") as string;
+  const notes = formData.get("notes") as string;
+  const isPublic = formData.get("isPublic") === "true";
+  const tagsRaw = formData.get("tags") as string;
+  const tags = tagsRaw ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean) : [];
+  const ingredientsRaw = formData.get("ingredients") as string;
+  const ingredients = ingredientsRaw ? ingredientsRaw.split("\n").map((i) => i.trim()).filter(Boolean) : [];
+  const stepsRaw = formData.get("steps") as string;
+  const steps = stepsRaw ? stepsRaw.split("\n").map((s) => s.trim()).filter(Boolean) : [];
+
+  const baseSlug = slugify(title);
+  // Keep original slug unless title changed drastically? For simplicity, we can just update the slug.
+  const slug = makeUniqueSlug(baseSlug);
+
+  const recipe = await prisma.recipe.update({
+    where: { id },
+    data: {
+      title,
+      slug, // Optionally we can keep the old slug, but generating a new one is safe
+      description: description || null,
+      story: story || null,
+      lovedOneName,
+      relationship,
+      prepTime,
+      cookTime,
+      servings,
+      difficulty,
+      cuisine,
+      category,
+      coverImage,
+      tips: tips || null,
+      notes: notes || null,
+      isPublic,
+      tags,
+      ingredients,
+      steps,
+    },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/recipes");
+  revalidatePath(`/recipes/${id}`);
+  redirect(`/recipes/${id}`);
+}
+
+export async function deleteRecipe(id: string) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error("You must be logged in to delete a recipe.");
+  }
+
+  // Verify ownership
+  const existingRecipe = await prisma.recipe.findUnique({
+    where: { id },
+  });
+
+  if (!existingRecipe) {
+    throw new Error("Recipe not found.");
+  }
+
+  if (existingRecipe.authorId !== session.user.id) {
+    throw new Error("You do not have permission to delete this recipe.");
+  }
+
+  await prisma.recipe.delete({
+    where: { id },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/recipes");
+  redirect("/dashboard");
+}

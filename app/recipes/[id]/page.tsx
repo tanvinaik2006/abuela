@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { getRecipeById, getPublicRecipes, formatTime } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,6 +34,7 @@ const difficultyColor: Record<string, string> = {
 export default async function RecipePage({ params }: RecipePageProps) {
   const { id } = await params;
   const recipe = await getRecipeById(id);
+  const session = await auth();
 
   if (!recipe) {
     notFound();
@@ -114,10 +116,13 @@ export default async function RecipePage({ params }: RecipePageProps) {
               </div>
               <div className="flex items-center gap-4">
                 <RecipeActions
+                  recipeId={recipe.id}
                   recipeTitle={recipe.title}
                   likes={recipe.likes}
                   authorName={recipe.authorName}
                   authorImage={recipe.author?.image ?? undefined}
+                  authorId={recipe.authorId}
+                  currentUserId={session?.user?.id}
                 />
                 <div className="flex items-center gap-1.5 text-sm font-semibold text-rosy-brown">
                   <Heart className="w-4 h-4 fill-rosy-brown" />
