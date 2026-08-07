@@ -176,8 +176,7 @@ export default function EditRecipeForm({ recipe }: { recipe: any }) {
           </div>
 
           {/* ---- STEP: BASICS ---- */}
-          {currentStep === "basics" && (
-            <div className="space-y-5">
+          <div className={cn("space-y-5", currentStep !== "basics" && "hidden")}>
               <div>
                 <label className="block text-sm font-semibold text-dark-green mb-1.5 font-inter">
                   Recipe Title *
@@ -267,11 +266,9 @@ export default function EditRecipeForm({ recipe }: { recipe: any }) {
                 </div>
               </div>
             </div>
-          )}
 
           {/* ---- STEP: STORY ---- */}
-          {currentStep === "story" && (
-            <div className="space-y-5">
+          <div className={cn("space-y-5", currentStep !== "story" && "hidden")}>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-dark-green mb-1.5 font-inter">
@@ -321,26 +318,27 @@ export default function EditRecipeForm({ recipe }: { recipe: any }) {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-dark-green mb-1.5 font-inter">
-                  Cover Image URL (optional)
+                  Cover Image (optional)
                 </label>
                 <input
                   id="recipe-cover-image-input"
                   name="coverImage"
-                  type="url"
-                  defaultValue={recipe.coverImage}
-                  placeholder="https://…"
-                  className="input-abuela"
+                  type="file"
+                  accept="image/*"
+                  className="input-abuela file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-moss-green/10 file:text-moss-green hover:file:bg-moss-green/20"
                 />
+                <input type="hidden" name="coverImageStr" value={recipe.coverImage || ""} />
                 <p className="text-xs text-dark-green/40 mt-1 font-inter">
-                  Paste a photo URL or leave blank for a default image.
+                  Upload a photo or leave blank to keep the current image.
                 </p>
+                {recipe.coverImage && (
+                   <img src={recipe.coverImage} alt="Current cover" className="mt-2 w-32 h-32 object-cover rounded-md" />
+                )}
               </div>
             </div>
-          )}
 
           {/* ---- STEP: RECIPE ---- */}
-          {currentStep === "recipe" && (
-            <div className="space-y-8">
+          <div className={cn("space-y-8", currentStep !== "recipe" && "hidden")}>
               {/* Ingredients */}
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -442,11 +440,9 @@ export default function EditRecipeForm({ recipe }: { recipe: any }) {
                 />
               </div>
             </div>
-          )}
 
           {/* ---- STEP: SETTINGS ---- */}
-          {currentStep === "settings" && (
-            <div className="space-y-6">
+          <div className={cn("space-y-6", currentStep !== "settings" && "hidden")}>
               {/* Privacy */}
               <div>
                 <label className="block text-sm font-semibold text-dark-green mb-3 font-inter">
@@ -546,7 +542,6 @@ export default function EditRecipeForm({ recipe }: { recipe: any }) {
                 </p>
               </div>
             </div>
-          )}
 
           {/* Navigation buttons */}
           <div className="flex items-center justify-between mt-10 pt-6 border-t border-[#d4d0a8]">

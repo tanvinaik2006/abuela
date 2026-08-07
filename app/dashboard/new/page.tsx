@@ -361,17 +361,17 @@ export default function NewRecipePage() {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-dark-green mb-1.5 font-inter">
-                  Cover Image URL (optional)
+                  Cover Image (optional)
                 </label>
                 <input
                   id="recipe-cover-image-input"
                   name="coverImage"
-                  type="url"
-                  placeholder="https://…"
-                  className="input-abuela"
+                  type="file"
+                  accept="image/*"
+                  className="input-abuela file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-moss-green/10 file:text-moss-green hover:file:bg-moss-green/20"
                 />
                 <p className="text-xs text-dark-green/40 mt-1 font-inter">
-                  Paste a photo URL or leave blank for a default image.
+                  Upload a photo or leave blank for a default image.
                 </p>
               </div>
             </div>

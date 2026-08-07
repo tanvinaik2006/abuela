@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { uploadImageToCloudinary } from "@/lib/cloudinary";
 
 function slugify(text: string | null | undefined): string {
   if (!text) return "";
@@ -41,7 +42,16 @@ export async function createRecipe(formData: FormData) {
   if (!title || !lovedOneName || !relationship || !category || !cuisine) {
     throw new Error("Missing required fields. Please fill in all required fields.");
   }
-  const coverImage = (formData.get("coverImage") as string) || "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=800&q=80";
+
+  let coverImage = "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=800&q=80";
+  const coverImageFile = formData.get("coverImage") as File | null;
+  if (coverImageFile && coverImageFile.size > 0) {
+    const buffer = Buffer.from(await coverImageFile.arrayBuffer());
+    coverImage = await uploadImageToCloudinary(buffer, coverImageFile.type);
+  } else {
+    const coverImageStr = formData.get("coverImageStr") as string;
+    if (coverImageStr) coverImage = coverImageStr;
+  }
   const tips = formData.get("tips") as string;
   const notes = formData.get("notes") as string;
   const isPublic = formData.get("isPublic") === "true";
@@ -119,7 +129,16 @@ export async function updateRecipe(id: string, formData: FormData) {
   const lovedOneName = formData.get("lovedOneName") as string;
   const relationship = formData.get("relationship") as string;
   const story = formData.get("story") as string;
-  const coverImage = (formData.get("coverImage") as string) || "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=800&q=80";
+
+  let coverImage = existingRecipe.coverImage;
+  const coverImageFile = formData.get("coverImage") as File | null;
+  if (coverImageFile && coverImageFile.size > 0) {
+    const buffer = Buffer.from(await coverImageFile.arrayBuffer());
+    coverImage = await uploadImageToCloudinary(buffer, coverImageFile.type);
+  } else {
+    const coverImageStr = formData.get("coverImageStr") as string;
+    if (coverImageStr) coverImage = coverImageStr;
+  }
   const tips = formData.get("tips") as string;
   const notes = formData.get("notes") as string;
   const isPublic = formData.get("isPublic") === "true";
